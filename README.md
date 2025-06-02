@@ -47,7 +47,7 @@ The MG-MIS code can be compiled as follows:
 nvcc -O3 -arch=sm_70 -Xcompiler -fopenmp MG-MIS_10.cu -o mis
 ```
 
-To compute MIS of the input file graph.egr, enter:
+To compute an MIS of the input file graph.egr, enter:
 ```
 ./mis graph.egr <number of GPUs>
 ```
