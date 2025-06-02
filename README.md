@@ -40,18 +40,21 @@ Follow the instructions at: `https://github.com/burtscher/Indigo3Suite`
 
 ## Using MG-MIS
 
-The MG-MIS CUDA code consists of the source files MG-MIS_10.cu and ECLgraph.h located in the root directory of this repository.
+The MG-MIS CUDA code consists of the source files MG-MIS_10.cu and ECLgraph.h, located in the root directory of this repository. See the paper listed below for a description of MG-MIS. Note that MG-MIS is protected by the 3-Clause BSD license.
 
-Compile the code:
+The MG-MIS code can be compiled as follows:
 ```
 nvcc -O3 -arch=sm_70 -Xcompiler -fopenmp MG-MIS_10.cu -o mis
 ```
 
-Run the code on the input graph.egr:
+To compute an MIS of the input file graph.egr, enter:
 ```
 ./mis graph.egr <number of GPUs>
 ```
 
+## Publication
+
+Anju Mongandampulath Akathoott, Benila Virgin Jerald Xavier and Martin Burtscher. “A Multi-GPU Algorithm for Computing Maximal Independent Sets in Large Graphs.” Proceedings of the 2025 ACM International Conference on Supercomputing. June 2025. [pdf](https://userweb.cs.txstate.edu/~mb92/papers/ics25.pdf)
 
 
 
