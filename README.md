@@ -36,4 +36,4 @@ Run the code:
 
 ### To generate graphs using Indigo3
 
-`Follow the instructions at: https://github.com/burtscher/Indigo3Suite`
+Follow the instructions at: `https://github.com/burtscher/Indigo3Suite`
