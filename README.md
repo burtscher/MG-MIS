@@ -16,9 +16,9 @@ MG-MIS is a fast single-node multi-GPU (CUDA) implementation for computing maxim
   
   Ensure that `mpicc` is installed and the path to `openmpi` is specified in `PATH` and `LD_LIBRARY_PATH`
   
-  Run the following command from `src` directory:
+  To run the code:
       
-      ./graph500_reference_bfs <scale> <edgefactor> graph.txt
+  `./graph500_reference_bfs <scale> <edgefactor> graph.txt`
  
 To clean the generated graph (by removing self-loops and duplicate edges):
 Compile the code: `g++ -O3 clean_graph500.cpp -o convert`
