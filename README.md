@@ -56,5 +56,7 @@ To compute an MIS of the input file graph.egr, enter:
 
 Anju Mongandampulath Akathoott, Benila Virgin Jerald Xavier and Martin Burtscher. “A Multi-GPU Algorithm for Computing Maximal Independent Sets in Large Graphs.” Proceedings of the 2025 ACM International Conference on Supercomputing. June 2025. [pdf](https://userweb.cs.txstate.edu/~mb92/papers/ics25.pdf)
 
+**Summary**: MG-MIS is a single-node multi-GPU algorithm for computing maximal independent sets in large graphs. It is particularly useful when the graphs do not fit in the global memory of a single GPU. It distributes the computation among the GPUs in the compute node and applies novel techniques to minimize the inter-GPU communication. The key features such as dividing the computation into mutually exclusive local and remote phases, employing data transfers only in bulk mode, and avoiding the communication of priority values altogether make MG-MIS very efficient  for computing maximal independent sets in large graphs. 
 
+*This work has been supported in part by the National Science Foundation under Award Number 1955367.*
 
