@@ -44,7 +44,7 @@ The MG-MIS CUDA code consists of the source files MG-MIS_10.cu and ECLgraph.h lo
 
 Compile the code:
 ```
-nvcc -O3 -arch=sm_70 -Xcompiler -fopenmp MG_MIS_10.cu -o mis
+nvcc -O3 -arch=sm_70 -Xcompiler -fopenmp MG-MIS_10.cu -o mis
 ```
 
 Run the code on the input graph.egr:
