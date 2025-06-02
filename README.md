@@ -7,10 +7,9 @@ MG-MIS is a fast single-node multi-GPU (CUDA) implementation for computing maxim
 ### To generate input using Graph500:
   Download the code from `https://github.com/graph500/graph500`
   
-  Navigate to the `src` directory and compile the code:
+  Compile the code:
   
   ```
-  cd src
   make
   ``` 
   
