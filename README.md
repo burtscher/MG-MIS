@@ -14,7 +14,7 @@ MG-MIS is a fast single-node multi-GPU (CUDA) implementation for computing maxim
   make
   ``` 
   
-  Ensure that `mpicc` is installed and the path to `openmpi` is specified in `PATH` and `LD_LIBRARY_PATH`
+  Ensure that `mpicc` is installed and the path to `openmpi` is specified in `PATH` and `LD_LIBRARY_PATH`.
   
   Run the code:
       
