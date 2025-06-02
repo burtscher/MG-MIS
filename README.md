@@ -34,6 +34,6 @@ Run the code:
 ./clean graph.txt graph.egr
 ```
 
-### To generate graphs using Indigo3
+### To generate input using Indigo3
 
 Follow the instructions at: `https://github.com/burtscher/Indigo3Suite`
