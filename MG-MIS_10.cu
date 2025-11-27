@@ -420,6 +420,7 @@ int main(int argc, char* argv [])
   printf("edges: %ld\n", g.edges);
   printf("devices: %d\n", devices);
   printf("PageSize = %ld\n", PageSize);
+  if (devices == 1) printf("*** Note: This code is not optimized for use with a single GPU. ***\n");
 
   stattype* h_nstatus = new stattype [g.nodes];  // 0: out, 0xFE: in, and LSB = 1 implies undecided
   stattype** d_nstatus_ptrs = new stattype* [devices];
@@ -487,10 +488,15 @@ int main(int argc, char* argv [])
       fprintf(stderr, "ERROR: Input requires more global memory than available.\n\n");  exit(-1);
     }
 
-    long suggestedBufSize = ((availableGlobalMem - dataSizeNoBuf - 1) * 1024 * 1024 * 1024) / (2 * (devices - 1) * sizeof(long));  // Each GPU needs two buffers (one to send and one to receive) per other GPU
-    if (suggestedBufSize < 0) {
-      suggestedBufSize = ((availableGlobalMem - dataSizeNoBuf - 0.5) * 1024 * 1024 * 1024) / (2 * (devices - 1) * sizeof(long));  // Can't leave 1GB, not enough space.
-      assert(suggestedBufSize > 0);
+    long suggestedBufSize;
+    if (devices == 1) {
+      suggestedBufSize = 0;  // No inter-GPU communication buffers needed in a single-GPU system
+    } else {
+      suggestedBufSize = ((availableGlobalMem - dataSizeNoBuf - 1) * 1024 * 1024 * 1024) / (2 * (devices - 1) * sizeof(long));  // Each GPU needs two buffers (one to send and one to receive) per other GPU
+      if (suggestedBufSize < 0) {
+        suggestedBufSize = ((availableGlobalMem - dataSizeNoBuf - 0.5) * 1024 * 1024 * 1024) / (2 * (devices - 1) * sizeof(long));  // Can't leave 1GB, not enough space.
+        assert(suggestedBufSize > 0);
+      }
     }
 
 #pragma omp critical
@@ -502,18 +508,25 @@ int main(int argc, char* argv [])
     }
 
 #pragma omp barrier
-    if (h_BUF_SIZE < 16384000) {
+    if (devices == 1) {
+      h_BUF_SIZE = 16384000;  // Default size retained. Note that no inter-GPU communication is involved when devices = 1
+    } else if (h_BUF_SIZE < 16384000) {
       printf("Suggested new h_BUF_SIZE is %d, which is < 16384000. Exiting...\n", h_BUF_SIZE);
       exit(-1);
     }
 
+    long bufMemSize = (devices > 1) ? (2 * (devices - 1) * h_BUF_SIZE * sizeof(long)) : 0;
 #pragma omp single
     {
       printf("h_BUF_SIZE of one buffer = %ld words (%.2f GB)\n", h_BUF_SIZE, (float(h_BUF_SIZE * sizeof(long)) / giga));
-      printf("GPU #%d - Total buffer size of all %d buffers in this GPU: %.2f GB\n", i, 2 * (devices - 1), float(2 * (devices - 1) * h_BUF_SIZE * sizeof(long)) / giga);  // One for sending one for receiving, for each other GPU
+      if (devices > 1) {
+        printf("GPU #%d - Total buffer size of all %d buffers in this GPU: %.2f GB\n", i, 2 * (devices - 1), float(2 * (devices - 1) * h_BUF_SIZE * sizeof(long)) / giga);  // One for sending one for receiving, for each other GPU
+      } else {
+        printf("No inter-GPU buffers used since it is single GPU mode.\n");
+      }
     }
 
-    dataSize = float(numLocalNodes * sizeof(stattype) + 2 * numLocalNodes * sizeof(g.nindex[0]) + numEdges * sizeof(g.nlist[0]) + 2 * (devices - 1) * h_BUF_SIZE * sizeof(long)) / giga;  // 2 * used for counting remoteNbrIndx array
+    dataSize = float(numLocalNodes * sizeof(stattype) + 2 * numLocalNodes * sizeof(g.nindex[0]) + numEdges * sizeof(g.nlist[0]) + bufMemSize) / giga;  // 2 * used for counting remoteNbrIndx array
     printf("GPU #%d - Total memory usage: %.2f GB\n", i, dataSize);
 
     if (numLocalNodes > 0) {
